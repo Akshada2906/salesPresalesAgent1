@@ -1,0 +1,11 @@
+<div class="w-80 bg-white p-4 border-l">
+    <h3 class="font-bold text-lg mb-4">Tech Stack</h3>
+    <div *ngIf="taskInfo?.techStack">
+      <div *ngFor="let tech of taskInfo.techStack" class="mb-4">
+        <h4 class="font-semibold text-blue-600">{{ tech.name }}</h4>
+        <p>{{ tech.description }}</p>
+        <p class="text-sm text-gray-500">{{ tech.usage }}</p>
+      </div>
+    </div>
+  </div>
+  

@@ -1,0 +1,59 @@
+<div class="h-screen flex flex-col bg-gray-50">
+  <header class="bg-white shadow-sm flex-shrink-0">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16 items-center">
+        <img src="../assets/images/Logo.png" class="h-11 w-auto" />
+
+        <div class="ml-auto flex space-x-4">
+          <img src="../assets/images/outline.png" class="h-5 w-auto" />
+          <img src="../assets/images/Profile.png" class="h-5 w-auto" />
+        </div>
+
+        <h1 class="text-2xl font-bold text-gray-900"></h1>
+      </div>
+    </div>
+  </header>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-shrink-0">
+    <div class="border-b border-gray-200">
+      <nav class="-mb-px flex space-x-8">
+        <button (click)="activeTab.set('chat')" [class]="getTabClass('chat')">
+          <mat-icon class="w-5 h-5">message</mat-icon>
+          On Call Support
+        </button>
+        <button (click)="activeTab.set('research')" [class]="getTabClass('research')">
+          <mat-icon class="w-5 h-5">search</mat-icon>
+          Research
+        </button>
+        <button (click)="activeTab.set('proposal')" [class]="getTabClass('proposal')">
+          <mat-icon class="w-5 h-5">description</mat-icon>
+          Generate Proposal
+        </button>
+      </nav>
+    </div>
+  </div>
+
+  <div *ngIf="activeTab() === 'research'" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="border-b border-gray-200">
+      <nav class="-mb-px flex space-x-8">
+        <button (click)="researchTab.set('client-research')" [class]="getResearchTabClass('client-research')">
+          Client Research
+        </button>
+        <button (click)="researchTab.set('script-generator')" [class]="getResearchTabClass('script-generator')">
+          Script Generator
+        </button>
+      </nav>
+    </div>
+  </div>
+
+  <main class="flex-1 overflow-hidden">
+    <div class="h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="bg-white rounded-lg shadow h-full overflow-auto">
+        <app-script-generator *ngIf="activeTab() === 'research' && researchTab() === 'script-generator'" [companyResearch]="companyResearch()" />
+        <app-client-research *ngIf="activeTab() === 'research' && researchTab() === 'client-research'" />
+        <app-chat-interface *ngIf="activeTab() === 'chat'" />
+         <app-proposal-form *ngIf="activeTab() === 'proposal'"></app-proposal-form>
+      </div>
+    </div>
+  </main>
+</div>

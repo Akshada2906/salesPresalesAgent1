@@ -1,0 +1,17 @@
+.dynamic-textarea {
+    resize: none;
+    overflow-y: hidden;
+    min-height: 50px;
+    width: 100%;
+  }
+  
+  textarea {
+    height: auto;
+    min-height: 50px;
+    overflow-y: hidden;
+  }
+  
+  textarea:focus {
+    height: auto;
+  }
+  
