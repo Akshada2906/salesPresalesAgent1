@@ -19,8 +19,6 @@ interface ProposalData {
   customer: string;
   title: string;
   requirements: string;
-  completion: string;
-  amount: number;
 }
 
 interface ProposalSection {
@@ -64,8 +62,6 @@ export class ProposalFormComponent {
       customer: ["", Validators.required],
       title: ["", Validators.required],
       requirements: ["", Validators.required],
-      completion: ["", Validators.required],
-      amount: [0, [Validators.required, Validators.min(0)]],
     });
   }
 
