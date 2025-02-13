@@ -18,8 +18,6 @@ PROPOSAL_TEMPLATE = '''
     Client: {customer_name}
     Project: {project_title}
     Requirements: {requirements}
-    Timeline: Complete by {completion_date}
-    Budget: USD {amount}
 
     Reference Experience:
     {relevant_experience}

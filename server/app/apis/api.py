@@ -135,8 +135,6 @@ class ProposalRequest(BaseModel):
     customer: str
     title: str
     requirements: str
-    completion: str
-    amount: float
 
 class ProposalResponse(BaseModel):
     proposal: Dict[str, Any]
@@ -148,8 +146,6 @@ async def handle_proposal(request: ProposalRequest):
             request.customer, 
             request.title, 
             request.requirements, 
-            request.completion, 
-            request.amount
         )
         if result is None:
             raise HTTPException(status_code=400, detail="Failed to generate proposal")

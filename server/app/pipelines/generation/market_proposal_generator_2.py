@@ -37,7 +37,7 @@ def search_relevant_experience(requirements):
 
 
 # Generate Proposal
-def generate_proposal_content(customer, title, requirements, completion, amount, relevant_experience):
+def generate_proposal_content(customer, title, requirements, relevant_experience):
     if not relevant_experience:
         print("Warning: relevant_experience is empty!")
         relevant_experience = "No directly relevant past experience found."
@@ -47,8 +47,6 @@ def generate_proposal_content(customer, title, requirements, completion, amount,
         "customer_name": customer, 
         "project_title": title, 
         "requirements": requirements, 
-        "completion_date": completion, 
-        "amount": amount, 
         "relevant_experience": relevant_experience
     })
     response = llm.invoke(prompt_response.to_string())
@@ -62,9 +60,9 @@ def clean_json_string(content: str) -> str:
     return content
 
 
-def main(customer, title, requirements, completion, amount):
+def main(customer, title, requirements):
     relevant_experience = search_relevant_experience(requirements)
-    proposal_content = generate_proposal_content(customer, title, requirements, completion, amount, relevant_experience)
+    proposal_content = generate_proposal_content(customer, title, requirements, relevant_experience)
     
     try:
         cleaned_content = clean_json_string(proposal_content)
@@ -87,8 +85,6 @@ if __name__ == "__main__":
     parser.add_argument('--customer', required=True, help='Customer name')
     parser.add_argument('--title', required=True, help='Project title')
     parser.add_argument('--requirements', required=True, help='Project requirements')
-    parser.add_argument('--completion', required=True, help='Completion date')
-    parser.add_argument('--amount', required=True, type=float, help='Project amount in USD')
     args = parser.parse_args()
-    proposal_content = main(args.customer, args.title, args.requirements, args.completion, args.amount)
+    proposal_content = main(args.customer, args.title, args.requirements)
     print(proposal_content)
