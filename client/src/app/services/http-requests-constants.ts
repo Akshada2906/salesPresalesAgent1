@@ -1,4 +1,5 @@
-export const BASE_URL = "http://vm-021-spa.nitorinfotech.in:8001"
+// export const BASE_URL = "http://vm-021-spa.nitorinfotech.in:8001"
+export const BASE_URL = "http://127.0.0.1:8000"
 
 export const HttpRequestsConstants = {
   CLIENT_RESEARCH: `${BASE_URL}/client_research`,

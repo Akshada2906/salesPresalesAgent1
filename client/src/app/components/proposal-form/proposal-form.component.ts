@@ -52,7 +52,8 @@ interface GeneratedProposal {
 export class ProposalFormComponent {
   proposalForm: FormGroup;
   isLoading = false;
-  proposal: any;
+  proposal: ProposalSection[] = [];
+  isEditing = false;
 
   private http = inject(HttpClient);
   private fb = inject(FormBuilder);
@@ -83,9 +84,7 @@ export class ProposalFormComponent {
       (result) => {
         const proposalSections = Object.values(result.proposal);
         proposalSections.sort((a, b) => a.layout_rank - b.layout_rank);
-        let proposalData = { proposal: proposalSections };
-        this.proposal = proposalData.proposal;
-        console.log("111111111 : ", this.proposal);
+        this.proposal = proposalSections;
         this.isLoading = false;
       },
       (error: HttpErrorResponse) => {
@@ -93,6 +92,28 @@ export class ProposalFormComponent {
         this.isLoading = false;
       }
     );
+  }
+
+  toggleEdit(): void {
+    this.isEditing = !this.isEditing;
+  }
+
+  downloadProposal(): void {
+    const content = this.proposal
+      .map(section => `# ${section.title}\n\n${section.content}`)
+      .join('\n\n');
+    
+    const blob = new Blob([content], { 
+      type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'proposal.docx';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   }
 
   get f() {

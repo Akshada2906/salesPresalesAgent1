@@ -69,16 +69,16 @@ def create_or_get_vector_storage(data, persist_directory, collection_name):
     return vector_store
 
 
+
+vectorDB = create_or_get_vector_storage(data, "vector_store_1", "nitor_case_studies")
+
+
 def create_prompt_template():
     return ChatPromptTemplate.from_messages([
         ("system", system_prompt),
         MessagesPlaceholder(variable_name="chat_history"),
-        ("human", "{user_query}")
+        ("human", "{query}")
     ])
-
-
-
-vectorDB = create_or_get_vector_storage(data, "vector_store_1", "nitor_case_studies")
 
 def main(user_query):
     prompt = create_prompt_template()
@@ -99,15 +99,13 @@ def main(user_query):
         {
             "input": user_query,
             "context": relevant_chunks,
-            "user_query": user_query
+            "query": user_query
         }, 
         config=config
     )
     
     try:
-        # Clean up the response to get just the JSON content
         if isinstance(response.content, str):
-            # Remove markdown code block if present
             if "```json" in response.content:
                 json_str = response.content.split("```json\n")[1].split("\n```")[0]
             else:
@@ -115,7 +113,6 @@ def main(user_query):
             return json_str
         return json.dumps(response.content)
     except Exception as e:
-        # Fallback response
         return json.dumps({
             "message": "Error processing response",
             "companies_list": []
