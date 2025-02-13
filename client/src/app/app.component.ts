@@ -6,7 +6,6 @@ import { ChatInterfaceComponent } from "./components/chat-interface/chat-interfa
 import { ProposalFormComponent } from "./components/proposal-form/proposal-form.component";
 import { MatIconModule } from "@angular/material/icon";
 import { ReactiveFormsModule } from "@angular/forms";
-import { RouterOutlet } from "@angular/router";
 
 type TabType = "research" | "chat" | "proposal";
 type ResearchTabType = "client-research" | "script-generator";
@@ -22,12 +21,12 @@ type ResearchTabType = "client-research" | "script-generator";
     ChatInterfaceComponent,
     ProposalFormComponent,
     ReactiveFormsModule,
-    // RouterOutlet
   ],
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.css"],
 })
 export class AppComponent {
+
   activeTab = signal<TabType>("chat");
 
   researchTab = signal<ResearchTabType>("client-research");

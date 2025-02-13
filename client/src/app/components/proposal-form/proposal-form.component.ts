@@ -1,12 +1,19 @@
-import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { CommonModule } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
-import { MarkdownModule } from 'ngx-markdown';
+import { Component, inject } from "@angular/core";
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from "@angular/forms";
+import { HttpClient, HttpClientModule } from "@angular/common/http";
+import { HttpErrorResponse } from "@angular/common/http";
+import { Observable } from "rxjs";
+import { CommonModule } from "@angular/common";
+import { MatIconModule } from "@angular/material/icon";
+import { MarkdownModule } from "ngx-markdown";
 import { MarkdownToHtmlModule } from "../../markdown-to-html.module";
+import { HttpRequestsConstants } from "../../services/http-requests-constants";
 
 interface ProposalData {
   customer: string;
@@ -29,12 +36,20 @@ interface GeneratedProposal {
 }
 
 @Component({
-  selector: 'app-proposal-form',
+  selector: "app-proposal-form",
   standalone: true,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule, HttpClientModule, MatIconModule, MarkdownModule, MarkdownToHtmlModule],
-  templateUrl: './proposal-form.component.html',
-  styleUrls: ['./proposal-form.component.css'],
-  providers: [HttpClient]
+  imports: [
+    FormsModule,
+    CommonModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    MatIconModule,
+    MarkdownModule,
+    MarkdownToHtmlModule,
+  ],
+  templateUrl: "./proposal-form.component.html",
+  styleUrls: ["./proposal-form.component.css"],
+  providers: [HttpClient],
 })
 export class ProposalFormComponent {
   proposalForm: FormGroup;
@@ -46,16 +61,19 @@ export class ProposalFormComponent {
 
   constructor() {
     this.proposalForm = this.fb.group({
-      customer: ['', Validators.required],
-      title: ['', Validators.required],
-      requirements: ['', Validators.required],
-      completion: ['', Validators.required],
+      customer: ["", Validators.required],
+      title: ["", Validators.required],
+      requirements: ["", Validators.required],
+      completion: ["", Validators.required],
       amount: [0, [Validators.required, Validators.min(0)]],
     });
   }
 
   generateProposal(data: ProposalData): Observable<GeneratedProposal> {
-    return this.http.post<GeneratedProposal>('http://localhost:8000/generate_proposal', data);
+    return this.http.post<GeneratedProposal>(
+      HttpRequestsConstants.GENERATE_PROPOSAL,
+      data
+    );
   }
 
   handleSubmit(): void {
@@ -65,8 +83,7 @@ export class ProposalFormComponent {
 
     this.isLoading = true;
 
-    this.generateProposal(this.proposalForm.value)
-    .subscribe(
+    this.generateProposal(this.proposalForm.value).subscribe(
       (result) => {
         const proposalSections = Object.values(result.proposal);
         proposalSections.sort((a, b) => a.layout_rank - b.layout_rank);
@@ -76,10 +93,10 @@ export class ProposalFormComponent {
         this.isLoading = false;
       },
       (error: HttpErrorResponse) => {
-        console.error('Error generating proposal:', error);
+        console.error("Error generating proposal:", error);
         this.isLoading = false;
       }
-    );  
+    );
   }
 
   get f() {
