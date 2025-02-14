@@ -24,6 +24,10 @@ class BaseLLMConfig(BaseSettings):
     temperature: float = 0.0
     google_api_key: str
 
+    model_config = {
+        'protected_namespaces': ('settings_',)
+    }
+
     class Config:
         env_file = BASE_DIR / "configs" / ".env.secret"
         env_file_encoding = "utf-8"

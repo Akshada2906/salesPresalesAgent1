@@ -12,13 +12,8 @@ from ..pipelines.generation.tech_extractor_generator import tech_extractor_chain
 from ..pipelines.generation.market_proposal_generator_2 import main as market_proposal_generator
 import os
 
-
-# from ..pipelines.generation.market_proposal_generator import conditions_chain
-# from ..pipelines.generation.update_proposal import update_proposal
-
-# Add this before creating the FastAPI app
 os.environ["CREWAI_DISABLE_TELEMETRY"] = "true"
-os.environ["CREWAI_TELEMETRY_TIMEOUT"] = "60"  # 60 seconds instead of default 30
+os.environ["CREWAI_TELEMETRY_TIMEOUT"] = "60"
 
 app = FastAPI(title="Market Proposal Generator API")
 
@@ -135,6 +130,8 @@ class ProposalRequest(BaseModel):
     customer: str
     title: str
     requirements: str
+    completion: str | None = None
+    amount: float | None = None
 
 class ProposalResponse(BaseModel):
     proposal: Dict[str, Any]
@@ -145,7 +142,9 @@ async def handle_proposal(request: ProposalRequest):
         result = market_proposal_generator(
             request.customer, 
             request.title, 
-            request.requirements, 
+            request.requirements,
+            request.completion, 
+            request.amount
         )
         if result is None:
             raise HTTPException(status_code=400, detail="Failed to generate proposal")
@@ -164,25 +163,6 @@ async def handle_proposal(request: ProposalRequest):
 #     terms_and_conditions: Optional[str] = None
 #     milestones: Optional[str] = None
 #     calendar_dates: Optional[str] = None
-
-
-# class UpdateProposalRequest(BaseModel):
-#     user_query: str
-
-
-# class ChatWithClientRequest(BaseModel):
-#     query: str
-
-# class ChatWithClientResponse(BaseModel):
-#     answer: str
-
-# @app.post("/chat_with_client", response_model=ChatWithClientResponse, operation_id="chat_with_client")
-# async def handle_chat_with_client(request: ChatWithClientRequest):
-#     try:
-#         answer = chat_main(request.query)
-#         return ChatWithClientResponse(answer=answer)
-#     except Exception as e:
-#         raise HTTPException(status_code=400, detail=str(e))
 
 # @app.post("/generate_proposal", response_model=ProposalResponse, operation_id="generate_proposal")
 # async def handle_proposal(request: ProposalRequest):
@@ -213,24 +193,6 @@ async def handle_proposal(request: ProposalRequest):
     
 #     except Exception as e:
 #         raise HTTPException(status_code=400, detail=str(e))
-
-
-
-
-
-
-    
-
-# Make a endpoint to get user query to update the JSON proposal template and return the updated JSON
-# @app.post("/update_proposal", response_model=ProposalResponse, operation_id="update_proposal")
-# async def handle_update_proposal(request: UpdateProposalRequest):
-#     try:
-#         result = update_proposal(request.user_query)
-#         return ProposalResponse(proposal=result)
-#     except Exception as e:
-#         raise HTTPException(status_code=400, detail=str(e))
-
-
 
 
 

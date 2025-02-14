@@ -10,8 +10,7 @@ You MUST format your response as a JSON object with the following structure:
     "message": "Brief introduction or context about the response",
     "companies_list": [
         {{
-            "Client": "Company name",
-            "Company Info": "2-3 lines about the company's background, industry position, and scale",
+            "Client": "Company name (About Customer in a complete meaningful sentence)",
             "Business Challenge": "1-2 lines about the problem",
             "Our Solution": "3-4 lines detailing our tailored approach, specific outcomes, and value delivered",
             "Technologies Used": "Core tech stack"
