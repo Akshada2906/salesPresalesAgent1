@@ -1,11 +1,11 @@
 <div class="h-full p-6">
   <div class="max-w-6xl mx-auto space-y-8">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-0">
 
       <div class="space-y-6">
         <form (ngSubmit)="handleResearch($event)" class="space-y-6">
           <div>
-            <label for="companyName" class="block text-sm font-medium text-gray-700 mb-1">
+            <label for="companyName" class="block text-sm font-medium text-gray-700 mb-0">
               Company Name
             </label>
             <input id="companyName" type="text" [(ngModel)]="companyName" name="companyName"
@@ -32,7 +32,10 @@
 
           <button type="submit" [disabled]="isLoading"
             class="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
-            <div *ngIf="isLoading" class="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+            <span *ngIf="isLoading" class="animate-spin w-5 h-5">
+              <mat-icon>hourglass_empty</mat-icon>
+            </span>
+            <div *ngIf="isLoading"></div>
             <span *ngIf="!isLoading">Generate scripts</span>
             <span *ngIf="isLoading">Generating...</span>
           </button>
@@ -144,186 +147,3 @@
     </div>
   </div>
 </div>
-
-
-
-
- <!-- <div class="h-full p-6">
-  <div class="max-w-6xl mx-auto space-y-8">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
-      
-     
-      <div class="space-y-6">
-        <form (ngSubmit)="handleResearch($event)" class="space-y-6">
-          <div>
-            <label for="companyName" class="block text-sm font-medium text-gray-700 mb-1">
-              Company Name
-            </label>
-            <input id="companyName" type="text" [(ngModel)]="companyName" name="companyName"
-              class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required
-              placeholder="Enter company name" />
-          </div>
-          <div>
-            <label for="prospectName" class="block text-sm font-medium text-gray-700 mb-1">
-              Prospect's Name
-            </label>
-            <input id="prospectName" type="text" [(ngModel)]="prospectName" name="prospectName"
-              class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required
-              placeholder="Enter prospect's name" />
-          </div>
-          <div>
-            <label for="prospectPosition" class="block text-sm font-medium text-gray-700 mb-1">
-              Prospect's Position
-            </label>
-            <input id="prospectPosition" type="text" [(ngModel)]="prospectPosition" name="prospectPosition"
-              class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required
-              placeholder="Enter prospect's position" />
-          </div>
-
-          <button type="submit" [disabled]="isLoading"
-            class="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
-            <div *ngIf="isLoading" class="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-            <span *ngIf="!isLoading">Generate scripts</span>
-            <span *ngIf="isLoading">Generating...</span>
-          </button>
-
-          <div *ngIf="error" class="p-4 bg-red-50 border border-red-200 rounded-lg">
-            <p class="text-red-600 text-sm">{{ error }}</p>
-          </div>
-        </form>
-
-        
-        <mat-accordion>
-          <mat-expansion-panel expanded="true">
-            <mat-expansion-panel-header>
-              <mat-panel-title class="text-lg font-semibold">
-                Cold Call Script
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <div class="space-y-4">
-              <div *ngIf="isLoading" class="flex justify-center p-4">
-                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-              </div>
-              <div *ngIf="!isLoading && scriptData">
-                <div *ngFor="let approach of scriptData.opening_approaches" class="p-3 bg-gray-50 rounded">
-                  <p>{{ approach }}</p>
-                </div>
-              </div>
-              <div *ngIf="!isLoading && !scriptData" class="text-gray-500 text-center p-4">
-                Generate scripts to view content
-              </div>
-            </div>
-          </mat-expansion-panel>
-        </mat-accordion>
-      </div>
-
-      
-      <div class="space-y-6">
-        
-        <mat-accordion>
-          <mat-expansion-panel expanded="true">
-            <mat-expansion-panel-header>
-              <mat-panel-title class="text-lg font-semibold">
-                Pain Points
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <div *ngIf="isLoading" class="flex justify-center p-4">
-              <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-            </div>
-            <div *ngIf="!isLoading && scriptData">
-              <div *ngFor="let point of scriptData.pain_points" class="mb-6 p-4 bg-gray-50 rounded">
-                <h4 class="font-semibold mb-2">{{ point.description }}</h4>
-                <p class="text-gray-700 mb-2">Impact: {{ point.impact }}</p>
-                <div class="ml-4">
-                  <h5 class="font-medium mb-1">Discovery Questions:</h5>
-                  <ul class="list-disc ml-4">
-                    <li *ngFor="let question of point.discovery_questions">{{ question }}</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div *ngIf="!isLoading && !scriptData" class="text-gray-500 text-center p-4">
-              Generate scripts to view content
-            </div>
-          </mat-expansion-panel>
-        </mat-accordion>
-
-       
-        <mat-accordion>
-          <mat-expansion-panel expanded="true">
-            <mat-expansion-panel-header>
-              <mat-panel-title class="text-lg font-semibold">
-                Solutions
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <div *ngIf="isLoading" class="flex justify-center p-4">
-              <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-            </div>
-            <div *ngIf="!isLoading && scriptData?.solution_positioning?.length">
-              <div *ngFor="let solution of scriptData?.solution_positioning" class="mb-6 p-4 bg-gray-50 rounded">
-                <h4 class="font-semibold mb-2">Solution for {{ getPainPointDescription(solution.pain_point_id) }}</h4>
-                <p class="text-gray-700 mb-2">{{ solution.solution }}</p>
-                <div class="ml-4">
-                  <h5 class="font-medium mb-1">Benefits:</h5>
-                  <ul class="list-disc ml-4">
-                    <li *ngFor="let benefit of solution.benefits">{{ benefit }}</li>
-                  </ul>
-                </div>
-                <p class="text-gray-700 mt-2">Success Story: {{ solution.success_story }}</p>
-              </div>
-            </div>
-            <div *ngIf="!isLoading && !scriptData" class="text-gray-500 text-center p-4">
-              Generate scripts to view content
-            </div>
-          </mat-expansion-panel>
-        </mat-accordion>
-
-        
-        <mat-accordion>
-          <mat-expansion-panel expanded="true">
-            <mat-expansion-panel-header>
-              <mat-panel-title class="text-lg font-semibold">
-                Objection Handlers
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <div *ngIf="isLoading" class="flex justify-center p-4">
-              <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-            </div>
-            <div *ngIf="!isLoading && scriptData?.objection_handlers?.length">
-              <div *ngFor="let handler of scriptData?.objection_handlers" class="mb-6 p-4 bg-gray-50 rounded">
-                <h4 class="font-semibold mb-2">{{ handler.objection }}</h4>
-                <p class="text-gray-700">Response: {{ handler.response }}</p>
-                <p class="text-gray-700">Follow-up: {{ handler.follow_up }}</p>
-              </div>
-            </div>
-            <div *ngIf="!isLoading && !scriptData" class="text-gray-500 text-center p-4">
-              Generate scripts to view content
-            </div>
-          </mat-expansion-panel>
-        </mat-accordion>
-
-        
-        <mat-accordion>
-          <mat-expansion-panel expanded="true">
-            <mat-expansion-panel-header>
-              <mat-panel-title class="text-lg font-semibold">
-                Closing Statements
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <div *ngIf="isLoading" class="flex justify-center p-4">
-              <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-            </div>
-            <div *ngIf="!isLoading && scriptData?.value_based_closing?.length">
-              <div *ngFor="let statement of scriptData?.value_based_closing" class="mb-6 p-4 bg-gray-50 rounded">
-                <p>{{ statement }}</p>
-              </div>
-            </div>
-            <div *ngIf="!isLoading && !scriptData" class="text-gray-500 text-center p-4">
-              Generate scripts to view content
-            </div>
-          </mat-expansion-panel>
-        </mat-accordion>
-      </div>
-    </div>
-  </div>
-</div> -->

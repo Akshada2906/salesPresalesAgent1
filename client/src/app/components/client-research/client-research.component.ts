@@ -88,6 +88,7 @@ import { MarkdownToHtmlModule } from "../../markdown-to-html.module";
 import { MatCardModule } from "@angular/material/card";
 import { HttpClient, HttpClientModule } from "@angular/common/http";
 import { HttpRequestsConstants } from "../../services/http-requests-constants";
+import { MatIconModule } from "@angular/material/icon";
 
 interface ScriptData {
   research_report: string;
@@ -103,6 +104,7 @@ interface ScriptData {
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatIconModule,
     MarkdownToHtmlModule,
     MatCardModule,
     HttpClientModule,

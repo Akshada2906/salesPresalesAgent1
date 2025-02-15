@@ -8,6 +8,7 @@ import { MatExpansionModule } from "@angular/material/expansion";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { LucideAngularModule } from "lucide-angular";
 import { HttpRequestsConstants } from "../../services/http-requests-constants";
+import { MatIconModule } from "@angular/material/icon";
 
 interface ScriptData {
   opening_approaches: string[];
@@ -44,6 +45,7 @@ interface ScriptData {
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatIconModule,
     MatExpansionModule,
     MatProgressSpinnerModule,
     LucideAngularModule,
