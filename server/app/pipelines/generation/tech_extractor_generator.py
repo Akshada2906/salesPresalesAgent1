@@ -3,7 +3,7 @@ from langchain.schema import StrOutputParser
 from langchain.prompts import ChatPromptTemplate
 from langchain.output_parsers.json import SimpleJsonOutputParser
 from langchain_google_genai import ChatGoogleGenerativeAI
-from ...core.llm_provider import azure_llm
+# from ...core.llm_provider import azure_llm
 from .prompts.tech_extractor import system_prompt, user_prompt_template
 
 from typing import List

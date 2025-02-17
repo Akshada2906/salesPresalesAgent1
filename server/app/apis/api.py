@@ -135,6 +135,8 @@ class ProposalRequest(BaseModel):
     customer: str
     title: str
     requirements: str
+    completion: str | None = None
+    amount: float | None = None
 
 class ProposalResponse(BaseModel):
     proposal: Dict[str, Any]
@@ -145,7 +147,9 @@ async def handle_proposal(request: ProposalRequest):
         result = market_proposal_generator(
             request.customer, 
             request.title, 
-            request.requirements, 
+            request.requirements,
+            request.completion, 
+            request.amount
         )
         if result is None:
             raise HTTPException(status_code=400, detail="Failed to generate proposal")
