@@ -136,7 +136,7 @@ class ProposalRequest(BaseModel):
     title: str
     requirements: str
     completion: str | None = None
-    amount: float | None = None
+    amount: str | None = None
 
 class ProposalResponse(BaseModel):
     proposal: Dict[str, Any]
