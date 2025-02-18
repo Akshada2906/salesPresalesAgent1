@@ -15,13 +15,15 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MarkdownModule } from "ngx-markdown";
 import { MarkdownToHtmlModule } from "../../markdown-to-html.module";
 import { HttpRequestsConstants } from "../../services/http-requests-constants";
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 interface ProposalData {
   customer: string;
   title: string;
   requirements: string;
   completion: string;
-  amount: string;
+  amount: number;
 }
 
 interface ProposalSection {
@@ -117,12 +119,6 @@ export class ProposalFormComponent {
 
   handleSubmit(): void {
     if (this.proposalForm.invalid) {
-      Object.keys(this.proposalForm.controls).forEach((key) => {
-        const control = this.proposalForm.get(key);
-        if (control?.invalid) {
-          control.markAsTouched();
-        }
-      });
       return;
     }
 
@@ -133,20 +129,46 @@ export class ProposalFormComponent {
     };
     this.simulateProgress();
 
-    this.generateProposal(this.proposalForm.value).subscribe({
-      next: (result) => {
-        const proposalSections = Object.values(result.proposal);
-        proposalSections.sort((a, b) => a.layout_rank - b.layout_rank);
-        this.proposal = proposalSections;
-        this.isLoading = false;
-        this.progress = { percentage: 0, message: "" };
-      },
-      error: (error: HttpErrorResponse) => {
-        console.error("Error generating proposal:", error);
-        this.isLoading = false;
-        this.progress = { percentage: 0, message: "" };
-      },
-    });
+    const maxRetries = 3;
+    let retryCount = 0;
+
+    const attemptGeneration = () => {
+      this.generateProposal(this.proposalForm.value).subscribe({
+        next: (result) => {
+          const proposalSections = Object.values(result.proposal);
+          proposalSections.sort((a, b) => a.layout_rank - b.layout_rank);
+          this.proposal = proposalSections;
+          this.isLoading = false;
+          this.progress = { percentage: 0, message: "" };
+        },
+        error: (error: HttpErrorResponse) => {
+          console.error("Error generating proposal:", error);
+          
+          if (error.status === 503 && retryCount < maxRetries) {
+            retryCount++;
+            this.progress = {
+              percentage: this.progress.percentage,
+              message: `Service busy, retrying (${retryCount}/${maxRetries})...`,
+            };
+            // Exponential backoff
+            setTimeout(() => attemptGeneration(), 2000 * Math.pow(2, retryCount));
+            return;
+          }
+
+          this.isLoading = false;
+          this.progress = { percentage: 0, message: "" };
+          
+          let errorMessage = "An error occurred while generating the proposal.";
+          if (error.status === 503) {
+            errorMessage = "Service is temporarily unavailable. Please try again later.";
+          }
+          
+          alert(errorMessage); // Consider using a proper error notification component
+        },
+      });
+    };
+
+    attemptGeneration();
   }
 
   toggleEdit(): void {
@@ -154,23 +176,45 @@ export class ProposalFormComponent {
   }
 
   downloadProposal(): void {
-    const content = this.proposal
-      .map((section) => `# ${section.title}\n\n${section.content}`)
-      .join("\n\n");
+    const title = this.proposalForm.get('title')?.value || 'untitled';
+  
+    // Prepare the request payload
+    const payload = {
+      sections: this.proposal.map((section, index) => ({
+        title: section.title,
+        content: section.content,
+        layout_rank: index
+      })),
+      title: title
+    };
 
-    const blob = new Blob([content], {
-      type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `proposal-${
-      this.proposalForm.get("title")?.value || "untitled"
-    }.docx`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    // Make the HTTP request with response type 'blob'
+    this.http.post(HttpRequestsConstants.SAVE_PROPOSAL, payload, {
+      responseType: 'blob'
+    })
+      .pipe(
+        catchError(error => {
+          console.error('Error saving and downloading proposal:', error);
+          alert('Failed to save and download proposal. Please try again.');
+          return of(null);
+        })
+      )
+      .subscribe(response => {
+        if (response) {
+          // Create and trigger download
+          const blob = new Blob([response], {
+            type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+          });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${title}_proposal.docx`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }
+      });
   }
 
   get formControls() {

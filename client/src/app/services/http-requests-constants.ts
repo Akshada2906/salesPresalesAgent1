@@ -7,4 +7,5 @@ export const HttpRequestsConstants = {
   GENERATE_SCRIPT: `${BASE_URL}/generate_script`,
   GENERATE_PROPOSAL:`${BASE_URL}/generate_proposal`,
   CHAT_AGENT: `${BASE_URL}/chat_assistant`,
+  SAVE_PROPOSAL: `${BASE_URL}/save_proposal`
 };

@@ -1,4 +1,5 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Response
+from fastapi.responses import FileResponse
 from pydantic import BaseModel, ConfigDict
 from typing import List, Dict, Any
 import json
@@ -11,6 +12,9 @@ from ..pipelines.generation.sales_chatbot import main as sales_chat_agent_main
 from ..pipelines.generation.tech_extractor_generator import tech_extractor_chain, TechModel, TechDescriptions
 from ..pipelines.generation.market_proposal_generator_2 import main as market_proposal_generator
 import os
+from tenacity import RetryError
+from litellm import InternalServerError, APIError
+from ..pipelines.proposal_generator.word_converter import md_to_docx
 
 
 # from ..pipelines.generation.market_proposal_generator import conditions_chain
@@ -130,13 +134,14 @@ async def handle_chat(request: ChatRequest):
 
 
 # --- Proposal Generator ---
+from ..pipelines.proposal_generator.main_proposal_generator import generate_proposal
 
 class ProposalRequest(BaseModel):
     customer: str
     title: str
     requirements: str
     completion: str | None = None
-    amount: str | None = None
+    amount: float | None = None
 
 class ProposalResponse(BaseModel):
     proposal: Dict[str, Any]
@@ -144,97 +149,97 @@ class ProposalResponse(BaseModel):
 @app.post("/generate_proposal", response_model=ProposalResponse, operation_id="generate_proposal")
 async def handle_proposal(request: ProposalRequest):
     try:
-        result = market_proposal_generator(
+        result = generate_proposal(
             request.customer, 
             request.title, 
             request.requirements,
             request.completion, 
             request.amount
         )
-        if result is None:
-            raise HTTPException(status_code=400, detail="Failed to generate proposal")
-        return ProposalResponse(proposal=result)
+        return ProposalResponse(proposal=result["proposal"])
+        
+    except InternalServerError as e:
+        raise HTTPException(
+            status_code=503,
+            detail="AI service temporarily unavailable. Please retry in a few moments."
+        )
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        print(f"Error generating proposal: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
     
 
+class ProposalSection(BaseModel):
+    title: str
+    content: str
+    layout_rank: int
 
-# class ProposalRequest(BaseModel):
-#     dollar_per_hour: Optional[str] = None
-#     estimate_hour: Optional[str] = None
-#     requirements: Optional[str] = None
-#     scope_of_work: Optional[str] = None
-#     tech_to_include: Optional[str] = None
-#     terms_and_conditions: Optional[str] = None
-#     milestones: Optional[str] = None
-#     calendar_dates: Optional[str] = None
+class SaveProposalRequest(BaseModel):
+    sections: List[ProposalSection]
+    title: str
+
+@app.post("/save_proposal")
+async def save_proposal(request: SaveProposalRequest):
+    try:
+        # Create the proposals directory if it doesn't exist
+        save_dir = os.path.join("app", "pipelines", "proposal_generator", "proposals")
+        os.makedirs(save_dir, exist_ok=True)
+        
+        # Generate filename for markdown
+        md_filename = f"{request.title.lower().replace(' ', '_')}_proposal.md"
+        md_filepath = os.path.join(save_dir, md_filename)
+        
+        # Convert sections to markdown content and save
+        content = ""
+        for section in sorted(request.sections, key=lambda x: x.layout_rank):
+            content += f"# {section.title}\n\n{section.content}\n\n"
+            
+        with open(md_filepath, "w", encoding="utf-8") as f:
+            f.write(content)
+            
+        # Generate DOCX
+        docx_filename = f"{request.title.lower().replace(' ', '_')}_proposal.docx"
+        docx_filepath = os.path.join(save_dir, docx_filename)
+        logo_path = os.path.join("app", "pipelines", "proposal_generator", "nitor_logo.png")
+        
+        # Convert markdown to DOCX
+        md_to_docx([md_filepath], docx_filepath, logo_path)
+        
+        # Return the DOCX file
+        return FileResponse(
+            docx_filepath,
+            media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            filename=docx_filename
+        )
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-# class UpdateProposalRequest(BaseModel):
-#     user_query: str
+# class ProposalRequest2(BaseModel):
+#     customer: str
+#     title: str
+#     requirements: str
+#     completion: str | None = None
+#     amount: str | None = None
 
+# class ProposalResponse2(BaseModel):
+#     proposal: Dict[str, Any]
 
-# class ChatWithClientRequest(BaseModel):
-#     query: str
-
-# class ChatWithClientResponse(BaseModel):
-#     answer: str
-
-# @app.post("/chat_with_client", response_model=ChatWithClientResponse, operation_id="chat_with_client")
-# async def handle_chat_with_client(request: ChatWithClientRequest):
+# @app.post("/generate_proposal2", response_model=ProposalResponse2, operation_id="generate_proposal2")
+# async def handle_proposal2(request: ProposalRequest2):
 #     try:
-#         answer = chat_main(request.query)
-#         return ChatWithClientResponse(answer=answer)
-#     except Exception as e:
-#         raise HTTPException(status_code=400, detail=str(e))
-
-# @app.post("/generate_proposal", response_model=ProposalResponse, operation_id="generate_proposal")
-# async def handle_proposal(request: ProposalRequest):
-#     try:
-#         result = conditions_chain.invoke({
-#         #
-#             "dollar_per_hour": request.dollar_per_hour,
-#             "estimate_hour": request.estimate_hour,
-#             "requirements": request.requirements,
-#             "scope_of_work": request.scope_of_work,
-#             "tech_to_include": request.tech_to_include,
-#             "terms_and_conditions": request.terms_and_conditions,
-#             "milestones": request.milestones,
-#             "calendar_dates": request.calendar_dates
-#         #
-#             # "dollar_per_hour": "$130 per hour",
-#             # "estimate_hour": "120 hours",
-#             # # "requirements": "Develop a web application integrating with genAI chat assistant for existing company Docs using specified technologies", 
-#             # "requirements": request.requirements,
-#             # "scope_of_work": "Full-cycle development including design, development, and deployment of a web application",
-#             # "tech_to_include": "Include: Azure SQL, ReactJS, Static Web Apps, Entra ID authentication, Azure Functions written in Python; Exclude: Technologies not compatible with Azure environments",
-#             # "terms_and_conditions": "50% payment required at project start 50% upon completion; Non-disclosure agreement (NDA) required",
-#             # "milestones" : "Initial Design by Jan 2023, Development by Feb-Mar 2023, Testing & Launch by Apr 2023",
-#             # "calendar_dates": "Project start: January 2023, Project end: April 2023"
-#         })
-
-#         return ProposalResponse(proposal=result)
-    
-#     except Exception as e:
-#         raise HTTPException(status_code=400, detail=str(e))
-
-
-
-
-
-
-    
-
-# Make a endpoint to get user query to update the JSON proposal template and return the updated JSON
-# @app.post("/update_proposal", response_model=ProposalResponse, operation_id="update_proposal")
-# async def handle_update_proposal(request: UpdateProposalRequest):
-#     try:
-#         result = update_proposal(request.user_query)
+#         result = generate_proposal(
+#             request.customer,
+#             request.title,
+#             request.requirements,
+#             request.completion,
+#             request.amount
+#         )
+#         if result is None:
+#             raise HTTPException(status_code=400, detail="Failed to generate proposal")
 #         return ProposalResponse(proposal=result)
 #     except Exception as e:
 #         raise HTTPException(status_code=400, detail=str(e))
-
-
 
 
 
