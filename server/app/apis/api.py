@@ -14,7 +14,9 @@ from ..pipelines.generation.market_proposal_generator_2 import main as market_pr
 import os
 from tenacity import RetryError
 from litellm import InternalServerError, APIError
-from ..pipelines.proposal_generator.word_converter import md_to_docx
+# from ..pipelines.proposal_generator.word_converter import md_to_docx
+from ..pipelines.proposal_generator.word_converter import create_docx
+
 
 
 # from ..pipelines.generation.market_proposal_generator import conditions_chain
@@ -180,13 +182,18 @@ class SaveProposalRequest(BaseModel):
 @app.post("/save_proposal")
 async def save_proposal(request: SaveProposalRequest):
     try:
+        # Get absolute base path
+        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        
         # Create the proposals directory if it doesn't exist
-        save_dir = os.path.join("app", "pipelines", "proposal_generator", "proposals")
+        save_dir = os.path.join(base_dir, "app", "pipelines", "proposal_generator", "proposals")
         os.makedirs(save_dir, exist_ok=True)
+        print(f"Save directory: {save_dir}")  # Debug log
         
         # Generate filename for markdown
         md_filename = f"{request.title.lower().replace(' ', '_')}_proposal.md"
         md_filepath = os.path.join(save_dir, md_filename)
+        print(f"Markdown filepath: {md_filepath}")  # Debug log
         
         # Convert sections to markdown content and save
         content = ""
@@ -199,10 +206,26 @@ async def save_proposal(request: SaveProposalRequest):
         # Generate DOCX
         docx_filename = f"{request.title.lower().replace(' ', '_')}_proposal.docx"
         docx_filepath = os.path.join(save_dir, docx_filename)
-        logo_path = os.path.join("app", "pipelines", "proposal_generator", "nitor_logo.png")
         
-        # Convert markdown to DOCX
-        md_to_docx([md_filepath], docx_filepath, logo_path)
+        # Get paths for images
+        first_image_1 = os.path.join(base_dir, "app", "pipelines", "proposal_generator", "first_image_1.png")
+        first_image_2 = os.path.join(base_dir, "app", "pipelines", "proposal_generator", "first_image_2.png")
+        logo_path = os.path.join(base_dir, "app", "pipelines", "proposal_generator", "nitor_logo.png")
+        
+        print(f"DOCX filepath: {docx_filepath}")  # Debug log
+        print(f"Logo path: {logo_path}")  # Debug log
+        
+        # Verify required files exist
+        for path in [logo_path, first_image_1, first_image_2]:
+            if not os.path.exists(path):
+                raise FileNotFoundError(f"Required file not found: {path}")
+        
+        # Convert markdown to DOCX using updated create_docx function
+        create_docx([md_filepath], docx_filepath, logo_path, first_image_1, first_image_2)
+        
+        # Verify DOCX was created
+        if not os.path.exists(docx_filepath):
+            raise FileNotFoundError(f"Failed to create DOCX at: {docx_filepath}")
         
         # Return the DOCX file
         return FileResponse(
@@ -212,6 +235,9 @@ async def save_proposal(request: SaveProposalRequest):
         )
             
     except Exception as e:
+        import traceback
+        error_msg = f"Error in save_proposal: {str(e)}\n{traceback.format_exc()}"
+        print(error_msg)  # Print detailed error for debugging
         raise HTTPException(status_code=500, detail=str(e))
 
 

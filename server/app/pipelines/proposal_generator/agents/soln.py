@@ -32,6 +32,7 @@ def generate_solution_approach(company_name, project_title, requirements, timeli
         Follow these guidelines:
 
         1.  **Solution Overview:** Provide a brief overview of the proposed technical solution, including the key technologies and architectural patterns.
+        1.1 **Architecture Diagram:** <<-- Architecture Diagram -->> (use this as a placeholder)
         2.  **Phases:** Divide the project into distinct, logical phases. Common phases include Assessment and Planning, Design and Architecture, Development, Testing, Deployment, Integration, Security Hardening, and Monitoring and Support. Infer the required phases based on the project requirements.
         3.  **Technology Stack:** Specify the recommended technology stack for each phase, including programming languages, frameworks, databases, cloud services, and integration tools.
         4.  **Integration Strategy:** Describe the integration strategy for connecting the new system with existing systems and third-party services, including APIs, message queues, and data synchronization techniques.

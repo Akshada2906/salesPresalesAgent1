@@ -1,81 +1,80 @@
-# Commercials
+# Commercials: Affin Moneybrokers REPO Trading Platform
 
-This section details the costs and payment terms associated with developing the automated Malaysian REPO/Reverse REPO trading application for Apple.  We propose two approaches, each optimized for different priorities: Approach 1 prioritizes speed to market with a slightly higher initial investment, while Approach 2 emphasizes long-term cost efficiency with a more gradual rollout. Both approaches remain within the specified budget of $24,234.0 USD.
-
+This section details the costs and payment terms associated with developing the REPO Trading Platform for Affin Moneybrokers. We present two approaches, each designed to meet the project requirements while remaining within the allocated budget of $20,000.  Both approaches prioritize a robust, secure, and compliant solution.
 
 ## Total Cost of Ownership
 
+The following table compares the estimated costs for two development approaches: a Cloud-Native Approach (Approach 1) and a Hybrid Approach (Approach 2).  Approach 1 leverages fully managed cloud services for scalability and reduced infrastructure management, while Approach 2 uses a combination of cloud and on-premise solutions for greater control and potential cost savings in the long run.
+
 | Component             | Estimated Cost ($) - Approach 1 | Estimated Cost ($) - Approach 2 |
 |----------------------|------------------------------------|------------------------------------|
-| Infrastructure cost   | $200 /month                      | $150 /month                      |
-| Development cost      | $18,000                           | $15,000                           |
-| Power BI Licensing    | $0 per user/month                 | $0 per user/month                 |
-| Development Time      | 26 Weeks                          | 30 Weeks                          |
-| **Total Project Cost** | **$18,420**                       | **$15,300**                       |
+| Infrastructure cost   | $250 /month                       | $150 /month                       |
+| Development cost      | $15,000                          | $12,000                          |
+| Power BI Licensing    | $0 (No Power BI required)         | $0 (No Power BI required)         |
+| Development Time      | 16 Weeks                           | 12 Weeks                           |
+| **Total Project Cost** | **$15,400**                        | **$12,180**                        |
 
 
 ## Infrastructure Costs
 
-**Approach 1**
+**Approach 1: Cloud-Native (Azure)**
 
 | Services            | Sub-services         | Description                                                                                                                                                                                    | Approx. Monthly Cost (in USD) |
 |---------------------|----------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------|
-| Azure Services      | App Service          | Hosting for the trading application.                                                                                                                                                           | $100                          |
-|                     | Data Lake Storage    | Storage for market data and transaction records.                                                                                                                                                 | $50                           |
-|                     | Azure DevOps         | Basic Plan (for 2 users): $12 per user/month. Provides access to Azure Boards, Repos, Pipelines (limited), Test Plans (read-only), Artifacts.                                           | $24                           |
-| Terraform           | HCP Free             | UP TO 500 resources per month. Get started with all capabilities needed for infrastructure as code provisioning.                                                                             | $0.00                          |
-| **Total infrastructure costs (per month)** |                      |                                                                                                                                                                                               | **$174**                         |
+| Azure Services      | App Service Plan     | Hosting the application. Tier selected based on anticipated traffic.                                                                                                                            | $150                          |
+|                     | Azure SQL Database   | Managed relational database for storing transactional data.                                                                                                                               | $50                           |
+|                     | Azure Cosmos DB      | NoSQL database for handling high-volume, real-time data feeds and potentially market data.                                                                                            | $50                           |
+|                     | Azure Key Vault       | Securely stores cryptographic keys and secrets.                                                                                                                                               | $0                            |
+|                     | Azure Monitor        | Monitoring and logging service for application health and performance.                                                                                                                      | $0 (included in App Service)|
+| Terraform           | HCP Free             | Infrastructure as Code provisioning.                                                                                                                                                       | $0                            |
+| **Total infrastructure costs (per month)** |                      |                                                                                                                                                                            | **$250**                       |
 
 
-**Approach 2**
+**Approach 2: Hybrid (On-Premise & Cloud)**
 
 | Services            | Sub-services         | Description                                                                                                                                                                                    | Approx. Monthly Cost (in USD) |
 |---------------------|----------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------|
-| AWS Services        | EC2                  | Cost-effective hosting for the application.                                                                                                                                                    | $75                           |
-|                     | S3                   | Storage for market data and transaction records. Utilizes cheaper storage options than Azure.                                                                                              | $50                           |
-|                     | AWS CodePipeline     |  For CI/CD Pipelines. Cheaper than Azure DevOps Basic for this use case                                                                                                                      | $25                           |
-| Terraform           | HCP Free             | UP TO 500 resources per month. Get started with all capabilities needed for infrastructure as code provisioning.                                                                             | $0.00                          |
-| **Total infrastructure costs (per month)** |                      |                                                                                                                                                                                               | **$150**                        |
+| On-Premise Server   | Server Hosting       |  Existing on-premise server used for some components; costs associated with power and maintenance are assumed covered by existing IT budget.                                                      | $0                            |
+| Azure Services      | Azure Blob Storage   | Stores large amounts of market data.                                                                                                                                                          | $50                           |
+|                     | Azure Functions      | Serverless compute for specific tasks.                                                                                                                                                      | $50                           |
+|                     | Azure Active Directory | Security and user management.                                                                                                                                                           | $0                            |
+| Terraform           | HCP Free             | Infrastructure as Code provisioning.                                                                                                                                                       | $0                            |
+| **Total infrastructure costs (per month)** |                      |                                                                                                                                                                            | **$100**                       |
 
 
-## Milestones for Approach 1
-
-| Milestone   | Deliverable                                                                                           | Delivery Timeline (In Weeks) | Amount     |
-|-------------|-------------------------------------------------------------------------------------------------------|------------------------------|------------|
-| Milestone 0 | Project Kickoff                                                                                       | Week 0                       | $1,000     |
-| Milestone 1 | Requirements Gathering and System Design                                                              | Weeks 1-4                     | $2,000     |
-| Milestone 2 | Development of Core Trading Engine                                                                     | Weeks 5-13                    | $5,000     |
-| Milestone 3 | Integration with Market Data and Existing Systems                                                    | Weeks 14-18                   | $4,000     |
-| Milestone 4 | Compliance Testing and Refinement                                                                     | Weeks 19-22                   | $3,000     |
-| Milestone 5 | User Acceptance Testing and Deployment                                                                 | Weeks 23-26                   | $3,000     |
-| **Total Amount** |                                                                                                       |                              | **$18,000** |
-
-
-## Milestones for Approach 2
+## Milestones for Approach 1: Cloud-Native
 
 | Milestone   | Deliverable                                                                                           | Delivery Timeline (In Weeks) | Amount     |
 |-------------|-------------------------------------------------------------------------------------------------------|------------------------------|------------|
-| Milestone 0 | Project Kickoff                                                                                       | Week 0                       | $1,000     |
-| Milestone 1 | Requirements Gathering and System Design                                                              | Weeks 1-5                     | $2,000     |
-| Milestone 2 | MVP Development (Core Functionality)                                                                   | Weeks 6-15                    | $4,000     |
-| Milestone 3 | Integration with Market Data (Phased Approach)                                                        | Weeks 16-20                   | $3,000     |
-| Milestone 4 | Compliance Testing and Refinement (Iterative)                                                          | Weeks 21-25                   | $3,000     |
-| Milestone 5 | User Acceptance Testing and Deployment (MVP)                                                           | Weeks 26-30                   | $2,000     |
-| **Total Amount** |                                                                                                       |                              | **$15,000** |
+| Milestone 0 | Project Kickoff, Requirements Gathering & Design                                                       | Week 0                       | $1,000     |
+| Milestone 1 | System Architecture Design & Prototyping                                                              | Weeks 1-4                    | $2,000     |
+| Milestone 2 | Development of Core Trading Engine & Market Data Integration                                          | Weeks 5-8                    | $4,000     |
+| Milestone 3 | Compliance Module Integration & Testing                                                                | Weeks 9-12                   | $4,000     |
+| Milestone 4 | Collateral Management Module Integration & Testing                                                      | Weeks 13-16                  | $4,000     |
+| **Total Amount** |                                                                                                      |                              | **$15,000** |
+
+
+## Milestones for Approach 2: Hybrid
+
+| Milestone   | Deliverable                                                                                           | Delivery Timeline (In Weeks) | Amount     |
+|-------------|-------------------------------------------------------------------------------------------------------|------------------------------|------------|
+| Milestone 0 | Project Kickoff, Requirements Gathering & Design                                                       | Week 0                       | $1,000     |
+| Milestone 1 | System Architecture Design & Prototyping                                                              | Weeks 1-3                    | $1,500     |
+| Milestone 2 | Development of Core Trading Engine & On-Premise Integration                                          | Weeks 4-7                    | $3,500     |
+| Milestone 3 | Compliance Module Integration & Testing                                                                | Weeks 8-10                   | $3,500     |
+| Milestone 4 | Collateral Management Module Integration & Testing                                                      | Weeks 11-12                  | $2,500     |
+| **Total Amount** |                                                                                                      |                              | **$12,000** |
 
 
 ## License Cost
 
-This project does not require any Power BI licensing.  All data visualization and reporting will be handled within the application itself or through standard tools already available to Apple.
+No specific software licenses (like Power BI) are required for either approach.  The costs are already incorporated into the development and infrastructure costs.
 
 
 ## Payment Terms and Conditions
 
 *   **Currency:** USD
-*   **Payment Schedule:** Milestone-based payments as outlined in the Milestone tables for each approach.  50% upfront upon contract signing, and the remaining amount distributed according to milestone completion and approval.
+*   **Payment Schedule:** Milestone-based payments as detailed in the Milestone tables above.  50% upfront payment upon signing the contract, followed by 50% upon successful completion and acceptance of each milestone.
 *   **Invoice Terms:** Invoices will be issued upon completion of each milestone. Payment is due within 15 days of invoice date.
-*   **Interest on Late Payments:**  A late payment fee of 1% per month will be applied to any overdue payments.
-*   **Right to Halt Work for Non-Payment:** We reserve the right to halt work on the project if payment is not received within 30 days of the invoice due date.
-
-
-We believe both approaches offer compelling solutions within the stipulated budget, with Approach 1 offering a faster time-to-market and Approach 2 providing long-term cost savings.  We are prepared to discuss these options further and tailor them to Apple's specific needs and preferences.
+*   **Interest on Late Payments:** A 1% late payment fee will be applied per month on any outstanding balance.
+*   **Right to Halt Work:** We reserve the right to halt work on the project if payment is not received within the stipulated timeframe.
