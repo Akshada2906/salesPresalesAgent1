@@ -52,6 +52,9 @@ def generate_our_understanding(company_name, project_title, requirements, timeli
            - Phase 2: Implementation
            - Phase 3: Go-Live & Support
 
+        2.1 Methodology Architecture Diagram
+           - Placeholder for <<-- architecture diagram -->>
+
         3. Roles & Responsibilities
            - Create detailed tables for each phase
            - Include both Nitor and client responsibilities

@@ -7,14 +7,13 @@ You MUST format your response as a JSON object with the following structure:
     "message": "Here are some case studies highlighting [company]'s work in [relevant industry], showcasing our expertise in [key capabilities].",
     "companies_list": [
         {{
-            "Client": "[comprehensive 1-2 line company description including whether ISV/Enterprise]",
+            "Client": Client Name "[comprehensive 1-2 line company description including whether ISV/Enterprise]",
             "Business Challenge": "[Detailed problem statement with business context and importance]",
             "Our Solution": "[Comprehensive solution description including implementation details and concrete business benefits/impact]",
             "Technologies Used": "[Comma-separated list of all relevant technologies]"
         }}
     ]
 }}
-Do Not Mention Client Name in the Response
 
 **Data Schema Understanding**
 The data contains detailed project information with the following key fields:

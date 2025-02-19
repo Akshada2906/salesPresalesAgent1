@@ -1,75 +1,66 @@
-**Scope of Work: Trading App Development for Apple**
+**Scope of Work: REPO Trading Platform for Affin Moneybrokers**
 
 **1. Project Overview**
 
-This document outlines the scope of work for the development of a trading application for Apple, focusing on automating Malaysian REPO/Reverse REPO transactions.  The project will be undertaken by Nitor Infotech and will adhere to the timeline and budget constraints outlined below.
+This document outlines the scope of work for the development of a REPO trading platform for Affin Moneybrokers by Nitor Infotech. The project aims to automate Malaysian REPO/Reverse REPO transactions, ensuring compliance with GMRA regulations and supporting key participants (Affin, interbank, Bursa Malaysia, BNM).  The project timeline is four months, with a budget of USD 20,000.
 
 **1.1 In Scope**
 
-*   **Software Development:** Design, development, testing, and deployment of a trading application capable of automating Malaysian REPO/Reverse REPO transactions. This includes:
-    *   Integration with key participants' systems (Affin, interbank, Bursa Malaysia, BNM) via APIs (assuming APIs are available and documented;  see Assumptions).  This will involve secure communication protocols and data exchange mechanisms.
-    *   Implementation of real-time trade execution functionality, adhering to GMRA compliance standards.
-    *   Development of a robust collateral management module within the application.
-    *   Integration with a market data feed (e.g., Bloomberg Terminal API – assuming client provides access and necessary licenses; see Assumptions).
-    *   Implementation of a secure user authentication and authorization system.
-    *   Development of comprehensive logging and monitoring capabilities for audit trails and system health.
-    *   Unit, integration, and system testing of the application, ensuring all functionalities meet specifications and regulatory requirements.
-    *   Deployment of the application to a suitable environment (client-specified or Nitor-managed, see Assumptions).
-    *   Provision of basic training to designated Apple personnel on application usage and maintenance.
-
-*   **Documentation:**  Comprehensive technical documentation including system architecture diagrams, API specifications (internal & external), user manuals, and testing reports.
+*   **Core Trading Engine:** Development of a robust and scalable trading engine capable of automating REPO/Reverse REPO transaction execution, including order entry, trade confirmation, and settlement. This will include functionality for managing different trade types and incorporating necessary compliance checks.
+*   **Collateral Management Module:**  Development of a module for efficient collateral management, including tracking, valuation, and margin calls, adhering to GMRA regulations.
+*   **Real-time Compliance Monitoring:** Implementation of real-time monitoring and alerting capabilities to ensure adherence to GMRA and other relevant Malaysian regulations throughout the trading lifecycle.  This includes generating necessary audit trails.
+*   **Market Data Integration:** Integration with a designated market data provider (e.g., Bloomberg – client to specify API access and details) to obtain real-time pricing and market information.  This will involve building secure and efficient data ingestion and processing capabilities.  The scope includes handling initial data feed setup and testing, and providing documentation on integration process.
+*   **System Security:** Implementation of robust security measures to protect sensitive data and ensure system integrity, including user authentication, authorization, and data encryption. This will align with industry best practices and relevant Malaysian regulations.
+*   **Reporting and Analytics:** Development of basic reporting functionalities to track key performance indicators (KPIs) and provide insights into trading activity.  This will include customizable reporting for daily trades, collateral positions, and compliance metrics.
+*   **Testing and Documentation:** Comprehensive testing of the platform, including unit, integration, and user acceptance testing (UAT).  This will include the creation of detailed system documentation, user manuals, and API specifications.
+*   **Deployment Support:** Assistance with deployment of the platform to a client-specified environment.  This will include initial setup and configuration support.
 
 **1.2 Out of Scope**
 
-*   **Data Governance and Compliance:**  This project does not include the development of any data governance framework or compliance monitoring tools beyond those required for the core trading functionality.  This excludes aspects like data warehousing, reporting, or long-term data archiving.
-*   **Post-Deployment Support:** This project excludes ongoing maintenance, support, and bug fixes beyond a defined warranty period (3 months post-deployment).  Extended support contracts can be negotiated separately.
-*   **Development of New Instruments:** The application will support existing REPO/Reverse REPO instruments only.  Future expansion to handle new instruments will be considered as a separate project.
-*   **Third-party System Maintenance:** Nitor Infotech is not responsible for the maintenance or updates of any third-party systems (Bloomberg, bank APIs, etc.).  Nitor will ensure compatibility with the latest stable versions of these systems, however, we are not responsible for downtime related to third-party issues.
-*   **Mobile Application Development:**  This project focuses solely on a web-based or desktop application; mobile development is excluded.
-
+*   **Data Governance:**  Nitor Infotech will not be responsible for the overall data governance strategy or implementation of data quality measures beyond what is directly required for the functionality of the REPO trading platform. Data cleansing and migration from legacy systems is not included.
+*   **Integration with Existing Systems (Beyond Market Data):**  Integration with Affin Moneybroker's existing systems beyond the designated market data provider will require a separate scope of work and additional costs.
+*   **Advanced Analytics & Machine Learning:**  Implementation of advanced analytics or machine learning features for predictive modeling or algorithmic trading is beyond the scope of this project.
+*   **Post-Deployment Support & Maintenance:** Ongoing maintenance, support, and bug fixes after the initial deployment will require a separate service agreement.
+*   **Mobile Application Development:** Development of a mobile application for the trading platform is excluded.
+*   **Regulatory Compliance Audits:**  Nitor Infotech will not conduct independent regulatory compliance audits.  We will provide the necessary tools and functionalities for Affin Moneybrokers to meet their compliance obligations.
+*   **Training beyond initial platform overview:** Extensive training beyond a brief overview on initial use and operation of the platform will be a separate engagement.
 
 **1.3 Client Responsibilities**
 
-*   Provide timely access to all necessary systems, APIs, and data required for integration.
-*   Provide clear and detailed specifications for all required functionalities, including business rules and compliance requirements.
-*   Allocate sufficient resources (personnel, time) to participate actively in the project, including requirements gathering, testing, and user acceptance testing (UAT).
-*   Provide necessary licenses and access credentials for third-party systems (Bloomberg, etc.).
-*   Secure appropriate infrastructure for deployment (if not managed by Nitor Infotech).
-*   Review and approve all deliverables in a timely manner.
+*   Provide timely access to necessary systems, APIs, and data sources (including market data feed details and credentials).
+*   Provide key personnel with the relevant domain expertise for requirements clarification, testing, and user acceptance testing (UAT).
+*   Provide a suitable and secure deployment environment meeting pre-agreed specifications (servers, databases, network).
+*   Review and approve all deliverables throughout the project lifecycle.
+*   Provide feedback on testing and address identified issues promptly.
+
 
 **1.4 Assumptions**
 
-*   Apple will provide timely access to relevant systems, APIs, and data sources.
-*   The APIs provided by Affin, interbank, Bursa Malaysia, and BNM are well-documented, stable, and reliable, and maintain sufficient uptime during the development phase.
-*   Apple has sufficient internal resources and expertise to manage deployment and ongoing operational activities after the project completion.
-*   Bloomberg Terminal API access and related licenses are provided by Apple.
-*   The project environment (hardware, software, network) meets the minimum technical requirements defined by Nitor Infotech.  These requirements will be detailed in a separate document.
-*   Apple will provide clear and consistent feedback throughout the development process.
+*   Affin Moneybrokers will provide timely access to required systems and data.
+*   The designated market data provider (specified by Affin Moneybrokers) will offer stable and reliable APIs with sufficient documentation.
+*   Affin Moneybrokers possesses the technical expertise to support the deployment and initial operation of the platform.
+*   Affin Moneybrokers will dedicate sufficient resources to the project to facilitate timely communication and decision-making.
+*   The budget and timeline are sufficient to achieve the defined scope.  Any unforeseen complexities may necessitate adjustments to the scope, budget, or timeline.
 
 
-**2.  Project Timeline**
+**2. Acceptance Criteria**
 
-The project timeline is 7 months, broken down into distinct phases (detailed project schedule will be provided separately).
-
-**3. Project Budget**
-
-The total project budget is USD 24,234.00. A detailed budget breakdown will be provided separately.
-
-**4. Acceptance Criteria**
-
-*   Successful completion of all in-scope deliverables.
-*   Successful completion of UAT by Apple.
-*   Formal sign-off on all deliverables and documentation by authorized Apple representatives.
-*   All functionalities meet the agreed-upon specifications and perform as expected within defined performance parameters.
+The project will be considered complete upon successful completion of the UAT, with all identified defects addressed and signed off by Affin Moneybrokers.  This includes successful automated execution of REPO/Reverse REPO trades, accurate collateral management, compliance with GMRA regulations, and integration with the designated market data provider.  A formal sign-off document will be required.
 
 
-**5. Payment Schedule**
+**3. Payment Schedule**
 
-A detailed payment schedule will be provided separately, potentially based on project milestones.
+Payment will be structured as follows:
 
-**6. Change Management**
+*   25% upon project commencement.
+*   25% upon completion of the core trading engine and collateral management module.
+*   25% upon completion of integration with market data and compliance monitoring.
+*   25% upon successful completion of UAT and final sign-off.
 
-Any changes to the scope of work will require a formal change request process, including the assessment of impact on the timeline and budget.  A change request form will be provided.
+
+**4. Project Management**
+
+Nitor Infotech will utilize Agile methodology for project management, facilitating iterative development and regular communication.  Weekly progress reports will be provided to Affin Moneybrokers.  A dedicated project manager will be assigned to ensure timely delivery and effective communication.
 
 
-This Scope of Work document serves as a high-level overview. A more detailed project plan will be developed and shared upon project initiation.
+This Scope of Work document serves as a guide and is subject to revisions based on further discussions and detailed requirements analysis.  Any changes to the scope will be documented in a formal change request process and agreed upon by both parties.
