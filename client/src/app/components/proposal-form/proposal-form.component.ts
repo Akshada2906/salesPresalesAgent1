@@ -13,17 +13,17 @@ import { CommonModule } from "@angular/common";
 import { MatIconModule } from "@angular/material/icon";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MarkdownModule } from "ngx-markdown";
-import { MarkdownToHtmlModule } from "../../markdown-to-html.module";
 import { HttpRequestsConstants } from "../../services/http-requests-constants";
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { MarkdownToHtmlModule } from "../../markdown-to-html.module";
 
 interface ProposalData {
   customer: string;
   title: string;
   requirements: string;
   completion: string;
-  amount: number;
+  amount: number ;
 }
 
 interface ProposalSection {
@@ -56,8 +56,8 @@ interface ProgressState {
     MatIconModule,
     MatProgressBarModule,
     MarkdownModule,
-    MarkdownToHtmlModule,
-  ],
+    MarkdownToHtmlModule
+],
   providers: [HttpClient],
 })
 export class ProposalFormComponent {
@@ -121,19 +121,27 @@ export class ProposalFormComponent {
     if (this.proposalForm.invalid) {
       return;
     }
-
+    const formData = this.proposalForm.value;
+    const cleanedData = {
+      customer: formData.customer.trim(),
+      title: formData.title.trim(),
+      requirements: formData.requirements.trim(),
+      completion: formData.completion?.trim() || null,
+      amount: formData.amount ? parseFloat(formData.amount) : 50000  
+    };
+ 
     this.isLoading = true;
     this.progress = {
       percentage: 0,
       message: "Initiating proposal generation...",
     };
     this.simulateProgress();
-
+ 
     const maxRetries = 3;
     let retryCount = 0;
-
+ 
     const attemptGeneration = () => {
-      this.generateProposal(this.proposalForm.value).subscribe({
+      this.generateProposal(cleanedData).subscribe({
         next: (result) => {
           const proposalSections = Object.values(result.proposal);
           proposalSections.sort((a, b) => a.layout_rank - b.layout_rank);
@@ -143,31 +151,27 @@ export class ProposalFormComponent {
         },
         error: (error: HttpErrorResponse) => {
           console.error("Error generating proposal:", error);
-          
           if (error.status === 503 && retryCount < maxRetries) {
             retryCount++;
             this.progress = {
               percentage: this.progress.percentage,
               message: `Service busy, retrying (${retryCount}/${maxRetries})...`,
             };
-            // Exponential backoff
             setTimeout(() => attemptGeneration(), 2000 * Math.pow(2, retryCount));
             return;
           }
-
+ 
           this.isLoading = false;
           this.progress = { percentage: 0, message: "" };
-          
           let errorMessage = "An error occurred while generating the proposal.";
           if (error.status === 503) {
             errorMessage = "Service is temporarily unavailable. Please try again later.";
           }
-          
-          alert(errorMessage); // Consider using a proper error notification component
+          alert(errorMessage);
         },
       });
     };
-
+ 
     attemptGeneration();
   }
 
