@@ -13,7 +13,7 @@ from .prompts.sales_bot_prompt import system_prompt
 from dotenv import load_dotenv
 from rich import print
 
-from ...core.llm_provider import azure_llm
+# from ...core.llm_provider import azure_llm
 
 load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
